@@ -172,6 +172,76 @@ Function Get-LocalGroupMember {
 }
 
 #--------------------------------------------------------------------------------------
+
+Function Remove-LocalGroupMember {
+
+<#
+    .Synopsis
+        Remove an account from a Local Group
+
+    .Description
+        Removes a member from a Local Group on a Computer
+
+    .Parameter ComputerName
+        Computer that has the Local Group
+
+    .Parameter Group
+        Name of the group to remove a user from
+
+    .Parameter User
+        User Account to remove
+
+    .Example
+        Remove-LocalGroupMember -ComputerName jeffb-sql03 -Group Administrators -User Contoso\jeffbtest
+
+    .Link
+        https://mcpmag.com/articles/2015/05/28/managing-local-groups-in-powershell.aspx
+
+    .Note
+        Author : Jeff Buenting
+        Date : 2016 OCT 18
+#>
+
+    [CmdletBinding()]
+    Param (
+        [Parameter ( ValueFromPipeLine = $True ) ]
+        [String[]]$ComputerName = $env:COMPUTERNAME,
+
+        [Parameter ( Mandatory = $True )]
+        [String]$Group,
+        
+        [Parameter ( Mandatory = $True )]
+        [ValidateScript( { $_ -match '[A-Z,a-z,\.,\-,_]*\\?[A-Z,a-z,\.,\-,_]*' } ) ]
+        [String]$User
+
+    )
+
+    Begin {
+        # ----- Splitting Domain and User 
+        if ( $User -match '\\' ) {
+                $Domain = ($User.split( '\' ))[0]
+                $User = ($User.split( '\' ))[1]
+            }
+            Else {
+                $Domain = $ComputerName
+        }
+    }
+
+    Process {
+        Foreach ( $C in $ComputerName ) {
+            If ( Test-Connection $C -Quiet ) {
+                    Write-Verbose "Removing $Domain\$User From local Group $Group on $C"
+                   
+                    ([ADSI]"WinNT://$C/$Group,group").Remove("WinNT://$domain/$user")  
+                }
+                Else {
+                    Throw "$C is offline or does not exist"
+            }
+        }
+    }
+}
+
+#--------------------------------------------------------------------------------------
 # Password Cmdlets
 #--------------------------------------------------------------------------------------
 
@@ -281,8 +351,11 @@ function New-RandomString {
 #--------------------------------------------------------------------------------------
 
 New-Alias -Name New-ADPassword -Value New-RandomString
+#New-Alias -Name New-RandomString -Value New-ADPassword
 
 #--------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------
+
+Export-ModuleMember -Function * -Alias *
