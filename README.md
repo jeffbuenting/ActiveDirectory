@@ -5,10 +5,12 @@ Powershell Cmdlets that extend the functionality of the built in ActiveDirectory
 
 ### Functions
 ##### Add-DomainUsertoLocalGroup
-  - Adds a domain user/group to a local group   
+  - Adds a domain user/group to a local group       
+
 ##### Get-ADParentObject    
   - Returns the parent object of an AD Object.   
-##### New-ADPassword 
+
+##### New-ADPassword    
   - Generates a random password using specified character groups.
 
 ### Installation
