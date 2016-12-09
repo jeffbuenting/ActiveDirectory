@@ -354,6 +354,52 @@ New-Alias -Name New-ADPassword -Value New-RandomString
 #New-Alias -Name New-RandomString -Value New-ADPassword
 
 #--------------------------------------------------------------------------------------
+
+function get-ADParentObject {
+
+<#
+    .Synopsis 
+        Returns the parent object of an AD object.  
+
+    .Description
+        Returns the parent object of an AD Object.  Usually a Container or an OU.
+
+    .Parameter ADObject
+        An AD Object
+
+    .Example
+        Get the OU where a user account is located
+
+        Get-ADUSer -Filter 'Name -eq "Joe Smith"' | Get-ADParentObject
+
+    .Link
+        http://blog.uvm.edu/gcd/2012/07/12/listing-parent-of-ad-object-in-powershell-2/
+
+    .Note
+        Author : Jeff Buenting
+        Date : 2016 DEC 09
+#>
+
+    [CmdletBinding()]
+    Param (
+        [Parameter (Mandatory = $True,ValueFromPipeline = $True)]
+        [psobject[]]$ADObject
+    )
+
+    Process {
+        Foreach ( $A in $ADObject ) {
+            Write-Verbose "Getting parent object for $($ADObject.Name)"
+
+            # ----- This is the magic.  splits the Distiguished name and removes the First element (the AD Object).  WHat is left is then joined back together and you are left with the DN for the Parent object.  
+            $parts = $A.DistinguishedName -split '(?<![\\]),'
+            $DN = $parts[1..$($parts.Count-1)] -join ','
+
+            # ----- Convert the DN to an actual object
+            Write-Output (Get-ADObject -Identity $DN)
+        }
+    }
+}
+
 #--------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------
 #--------------------------------------------------------------------------------------
