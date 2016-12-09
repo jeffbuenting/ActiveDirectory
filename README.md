@@ -4,7 +4,7 @@
 Powershell Cmdlets that extend the functionality of the built in ActiveDirectory Module
 
 ### Functions
-##### Add-DomainUsertoLocalGroup
+##### **Add-DomainUsertoLocalGroup**
   - Adds a domain user/group to a local group       
 
 ##### Get-ADParentObject    
