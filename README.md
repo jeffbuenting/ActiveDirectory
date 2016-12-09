@@ -1,12 +1,13 @@
 # ActiveDirectory
-## AD Powershell module
+### AD Powershell module
 
 Powershell Cmdlets that extend the functionality of the built in ActiveDirectory Module
 
+### Functions
 Add-DomainUsertoLocalGroup ----- Adds a domain user/group to a local group   
 New-ADPassword ----- Generates a random password using specified character groups.
 
-Installation
+### Installation
 
 download both the PSM1 and PSD1 files.  Import the PSD1.
 
