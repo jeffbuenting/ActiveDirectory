@@ -48,18 +48,22 @@ Function Add-DomainUserToLocalGroup {
         [string]$domain, 
 
         [Parameter(Mandatory=$True)] 
-        [string]$user 
+        [string]$user,
+        
+        [PSCredential]$Credential 
     )
     
     Process { 
         Foreach ( $C in $computerName ) {
             If ( Test-Connection $C -Quiet ) {
                     Write-Verbose "Adding $Domain\$User to local Group $Group on $C"
-                   # $group = [ADSI]"WINNT://$C/$Group,Group"
 
-                    #$Group | FL *
-                    #$Group.Add("WinNT://$domain/$username") 
-                    ([ADSI]"WinNT://$C/$Group,group").Add("WinNT://$domain/$user")  
+                       # $group = [ADSI]"WINNT://$C/$Group,Group"
+
+                        #$Group | FL *
+                        #$Group.Add("WinNT://$domain/$username") 
+                        ([ADSI]"WinNT://$C/$Group,group").Add("WinNT://$domain/$user") 
+                 
   
 
                 }
