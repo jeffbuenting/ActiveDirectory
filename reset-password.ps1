@@ -1,4 +1,4 @@
-﻿$OU = 'ou=Human Services,ou=users,ou=managed,dc=vbgov,dc=com'
+﻿
 
 $users = Import-Csv c:\temp\data.csv 
 
