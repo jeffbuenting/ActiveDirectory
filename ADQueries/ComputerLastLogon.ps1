@@ -13,6 +13,12 @@ $Days = 90
 
 $Date = (Get-Date).AddDays(-$Days)
 
-$C = Get-ADComputer -Filter {LastLogonTimeStamp -lt $Date -and Enabled -eq "True"} -ResultPageSize 2000 -resultSetSize $null -Properties Name, OperatingSystem, SamAccountName, DistinguishedName, LastLogonDate, LastLogonTimeStamp | sort-object LastLogonTimeStamp | Format-Table DNSHostName, Enabled, @{Name='LastLogonTimeStamp'; E = {Get-Date $_.LastLogonTimeStamp}},@{N='OU';E={($_.DistinguishedName).split(',')[1].split('=')[1]}}
+$C = Get-ADComputer -Filter {LastLogonTimeStamp -lt $Date -and Enabled -eq "True"} -ResultPageSize 2000 -resultSetSize $null -Properties Name, OperatingSystem, SamAccountName, DistinguishedName, LastLogonDate, LastLogonTimeStamp #| sort-object LastLogonTimeStamp | Format-Table DNSHostName, Enabled,OperatingSystem, @{Name='LastLogonTimeStamp'; E = {Get-Date $_.LastLogonTimeStamp}},@{N='OU';E={($_.DistinguishedName).split(',')[1].split('=')[1]}}
 
+$C = $C | Where OperatingSystem -Like 'Windows Server *'
 
+$C | Sort-object LastLogonTimeStamp | FT DNSHostName, Enabled, OperatingSystem, @{N='OU';E={($_.DistinguishedName).split(',')[1].split('=')[1]}}, @{N='LastLogon';E={[DateTime]::FromFileTimeUtc($_.LastLogonTimeStamp)}}
+
+foreach ( $S in $C ) {
+    ping $S
+}
