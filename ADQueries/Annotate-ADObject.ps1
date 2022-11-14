@@ -1,0 +1,1 @@
+$Computers | Get-ADComputer -ErrorAction SilentlyContinue -Properties Description | Select-Object -first 1 | Set-ADComputer -Description "Disabled Per SYSOPS-31"

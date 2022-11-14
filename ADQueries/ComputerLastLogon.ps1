@@ -13,4 +13,6 @@ $Days = 90
 
 $Date = (Get-Date).AddDays(-$Days)
 
-Get-ADComputer -Filter {LastLogonTimeStamp -lt $Date} -ResultPageSize 2000 -resultSetSize $null -Properties Name, OperatingSystem, SamAccountName, DistinguishedName, LastLogonDate, LastLogonTimeStamp | sort-object LastLogonTimeStamp | Format-Table DNSHostName, Enabled, @{Name='LastLogonTimeStamp'; E = {Get-Date $_.LastLogonTimeStamp}}
+$C = Get-ADComputer -Filter {LastLogonTimeStamp -lt $Date -and Enabled -eq "True"} -ResultPageSize 2000 -resultSetSize $null -Properties Name, OperatingSystem, SamAccountName, DistinguishedName, LastLogonDate, LastLogonTimeStamp | sort-object LastLogonTimeStamp | Format-Table DNSHostName, Enabled, @{Name='LastLogonTimeStamp'; E = {Get-Date $_.LastLogonTimeStamp}},@{N='OU';E={($_.DistinguishedName).split(',')[1].split('=')[1]}}
+
+
