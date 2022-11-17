@@ -1,0 +1,1 @@
+get-aduser -searchbase 'OU=ServiceAccounts,DC=nrccua-hq,DC=local' -filter *  -Properties Description,lastlogondate,lastlogontimestamp,PasswordLastSet | where lastlogondate -lt (Get-Date 01/01/2022) | Sort-object lastlogontimestamp  | FT Name,lastlogondate, @{N='LastLogon';E={[DateTime]::FromFileTimeUtc($_.LastLogonTimeStamp)}},PasswordLastSet,Description
