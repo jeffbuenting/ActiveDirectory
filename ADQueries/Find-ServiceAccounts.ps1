@@ -11,6 +11,7 @@ $Servers = Get-ADComputer -Filter { Enabled -eq "True" -and OperatingSystem -lik
 
 $Servers | Sort-Object LastLogonTimeStamp | Format-Table DNSHostName, OperatingSystem,  @{N='LastLogon';E={[DateTime]::FromFileTimeUtc($_.LastLogonTimeStamp)}}
 
+# ignore these local accounts
 $LocalAccounts = 'NT AUTHORITY\LocalService','LocalSystem','NT AUTHORITY\NetworkService','NT AUTHORITY\System'
 
 $ServerOffline = @()
