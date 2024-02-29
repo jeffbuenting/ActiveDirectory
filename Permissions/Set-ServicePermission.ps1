@@ -18,9 +18,6 @@ if ( $OldSDDL -notcontains $NewPerm ) {
       # long perm sddl are written on multiple lines.  This merges them into one long string
       $OldSDDL = ((-split $OldSDDL) -join "")
 
-      # Insert at the end
-    #   $NewSDDL = "$OldSDDL$NewPerm"
-
       # find where we want to insert new sddl
       $BeforeIndex = $OldSDDL[1].indexof( 'S:' )
       $NewSDDL = "$($OldSDDL[1].Substring(0,$BeforeIndex))$NewPerm$($OldSDDL[1].Substring($BeforeIndex))"
