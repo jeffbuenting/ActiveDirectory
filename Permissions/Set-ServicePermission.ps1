@@ -1,6 +1,7 @@
 <#
     .LINK
         https://woshub.com/set-permissions-on-windows-service/
+        https://learn.microsoft.com/en-us/windows/win32/services/service-security-and-access-rights
 #>
 
 $LocalGroup = "Restart Windows Update Service"
